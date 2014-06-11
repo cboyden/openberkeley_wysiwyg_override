@@ -5,3 +5,15 @@
  */
 
 include_once 'openberkeley_wysiwyg_override.features.inc';
+
+/**
+ * Implementation of hook_wysiwyg_editor_settings_alter()
+ * 
+ * @see panopoly_wysiwyg_alter_wysiwyg_editor_settings()
+ */
+function ucb_openberkeley_wysiwyg_editor_settings_alter(&$settings, $context) {
+  // Add Panopoly Wysiwyg settings to Editor Profile
+  if ($context['profile']->format == 'editor') {
+    panopoly_wysiwyg_alter_wysiwyg_editor_settings($settings, $context);
+  }
+}
