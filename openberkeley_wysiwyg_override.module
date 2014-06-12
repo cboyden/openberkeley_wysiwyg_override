@@ -60,7 +60,7 @@ function openberkeley_wysiwyg_override_get_pathologic_paths() {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function openberkeley_wysiwyg_override_form_system_site_information_settings_alter(&$form, &$form_state, $form_id) {
+function openberkeley_wysiwyg_override_form_system_site_information_settings_alter(&$form, &$form_state) {
   $form['openberkeley_wysiwyg_override'] = array(
     '#type' => 'fieldset',
     '#title' => t('Pathologic paths'),
@@ -80,6 +80,12 @@ function openberkeley_wysiwyg_override_form_system_site_information_settings_alt
  */
 function openberkeley_wysiwyg_override_form_system_site_information_settings_submit($form, &$form_state) {
   $local_paths = $form_state['values']['openberkeley_wysiwyg_override_pathologic_paths'];
+
+  // If this is the installer, then the variable won't get saved by default,
+  // like it will on the settings form. So, we do it explicitly here.
+  if ($form['#form_id'] == 'install_configure_form') {
+    variable_set('openberkeley_wysiwyg_override_pathologic_paths', $local_paths);
+  }
 
   // We save the new values to text formats that use it so that a
   // features_revert() isn't necessary to keep everything in the Default state.
