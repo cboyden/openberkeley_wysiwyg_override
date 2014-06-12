@@ -23,13 +23,35 @@ function openberkeley_wysiwyg_override_get_pathologic_paths() {
   $paths = variable_get('openberkeley_wysiwyg_override_pathologic_paths', NULL);
 
   if (!$paths) {
-    // TODO: Generate defaults based on some heuristic.
-    $paths = <<<EOF
-http://test-EXAMPLE.pantheon.berkeley.edu/
-http://live-EXAMPLE.pantheon.berkeley.edu/
-http://EXAMPLE.localhost/
-http://EXAMPLE.berkeley.edu/
-EOF;
+    $paths_array = array();
+
+    // Automatically generate the Pantheon paths.
+    if (defined('PANTHEON_ENVIRONMENT')) {
+      $server_name = $_SERVER['HTTP_HOST'];
+      if (preg_match('/' . PANTHEON_ENVIRONMENT . '-([0-9a-zA-Z-]+)\.pantheon\.berkeley\.edu/', $server_name, $matches)) {
+        $project_name = $matches[1];
+        foreach (array('dev', 'test', 'live') as $environment_name) {
+          $paths_array[] = "http://{$environment_name}-{$project_name}.pantheon.berkeley.edu/";
+        }
+
+        // Add one final example for the live site.
+        $paths_array[] = 'http://EXAMPLE.berkeley.edu';
+      }
+    }
+
+    // If we're not on Pantheon (or couldn't figure out our URL), then we
+    // just give some examples.
+    if (empty($paths_array)) {
+      $paths_array = array(
+        'http://dev-EXAMPLE.pantheon.berkeley.edu/',
+        'http://test-EXAMPLE.pantheon.berkeley.edu/',
+        'http://live-EXAMPLE.pantheon.berkeley.edu/',
+        'http://EXAMPLE.localhost/',
+        'http://EXAMPLE.berkeley.edu/',
+      );
+    }
+
+    $paths = implode("\n", $paths_array);
   }
 
   return $paths;
