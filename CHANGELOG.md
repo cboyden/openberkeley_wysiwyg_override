@@ -3,6 +3,7 @@ Open Berkeley Wysiwyg Override - CHANGELOG
 
 ucb_openberkeley-7.x-1.0-dev
 ------------------------------
+* OPENUCB-310: 	Allow linkit button for panopoly_wysiwyg_text, add localhost pathologic example.
 * OPENUCB-310: 	Apply the Panopoly WYSIWYG customizations to the 'Editor' text format.
 * OPENUCB-310: 	Moved overrides from Features Override to hooks in our .module file.	
 * OPENUCB-310: 	Add an element to the 'Site information' form that allows users to update the Pathologic paths.
